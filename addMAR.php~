@@ -41,7 +41,7 @@
             <li><a href="addMDR.php">Add Movie/Director Relation</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <p>&nbsp;&nbsp;Browsering Content :</p>
+            <p>&nbsp;&nbsp;Browsing Content:</p>
             <li><a href="showA.php">Show Actor Information</a></li>
             <li><a href="showM.php">Show Movie Information</a></li>
           </ul>
