@@ -54,7 +54,76 @@
          <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
          <h3><b> Movie Information Page :</b></h3>
          <hr>
-            <hr>
+		 <?php
+			if($_GET["identifier"])
+			{
+				$id = $_GET["identifier"];
+
+				$db_connection = mysql_connect("localhost", "cs143", "");
+				if(!$db_connection)
+	    	 	{
+					$errmsg = mysql_error($db_connection);
+					print "Connection failed: $errmsg <br />";
+					exit(1);
+	    	 	}
+	    	 	mysql_select_db("CS143", $db_connection);
+
+				// Movie Info
+				$movie_query = "SELECT title, year, company, rating FROM Movie WHERE Movie.id=$id;";
+				$movie_rs = mysql_query($movie_query, $db_connection);
+				if(!$movie_rs)
+				{
+					$message = "Invalid movie ID: $id!";
+					print $message;
+				}
+				else
+				{
+					$row = mysql_fetch_row($movie_rs);
+
+					print "<h4><b>Movie Information:</b></h4>";
+					print "Title: $row[0]<br>";
+					print "Year: $row[1]<br>";
+					print "Producer: $row[2]<br>";
+					print "MPAA Rating: $row[3]<br>";
+
+					$movie_query = "SELECT concat(first, ' ', last) FROM Movie, MovieDirector, Director WHERE Movie.id=$id AND Movie.id=MovieDirector=mid AND MovieDirector.did=Director.id;";
+					$movie_rs = mysql_query($movie_query, $db_connection);
+					$row = mysql_fetch_row($movie_rs);
+					print "Director: $row[0]<br>";
+
+					$movie_query = "SELECT genre FROM MovieGenre WHERE MovieGenre.mid=$id;";
+					$movie_rs = mysql_query($movie_query, $db_connection);
+					$row = mysql_fetch_row($movie_rs);
+					print "Genre: $row[0]<br>";
+				}
+
+				print "<hr>";
+
+				// Movie actors + roles
+				$movie_query = "select concat(first, ' ', last), role, aid from MovieActor, Actor where MovieActor.mid = $id and MovieActor.aid = Actor.id";
+				$movie_rs = mysql_query($movie_query, $db_connection);
+				if(!$movie_rs)
+				{
+					print "Failed to find actor's movie roles!";
+				}
+				else
+				{
+					print "<h4><b>Actors in this movie:</b></h4><div class='table-responsive'> <table class='table table-bordered table-condensed table-hover'><thead> <tr><td>Movie</td><td>Role</td></thead></tr>";
+
+					print "<tbody>";
+					while($row = mysql_fetch_row($movie_rs))
+					{
+						print "<tr><td><a href=\"showA.php?identifier=$row[2]\">$row[0]</a></td><td>$row[1]</td></tr>";
+					}
+					print "</tbody></table></div>";
+				}
+
+				print "<hr>";
+
+				mysql_close($db_connection);
+			}
+			?>
+		<hr>
             <label for="search_input">Search:</label>
             <form class="form-group" action="search.php" method ="GET" id="usrform">
               <input type="text" id="search_input"class="form-control" placeholder="Search..." name="result"><br>

@@ -77,7 +77,7 @@
 	     {
 	        $m_search = $_GET["result"];
 	        $words = preg_split('/\s+/', trim($m_search));
-	        $actor_query = "select concat(first, ' ', last), dob
+	        $actor_query = "select concat(first, ' ', last), dob, id
 				from Actor
 				where ";
 	        $num_word = count($words, COUNT_NORMAL);
@@ -94,7 +94,7 @@
 		$actor_query .= ";";
 		print "$actor_query<br>";
 	        
-	        $movie_query = "select title, year
+	        $movie_query = "select title, year, id
 				from Movie
 				where ";
 		for($j = 0; $j < $num_word; $j++)
@@ -125,7 +125,7 @@
 		while($row = mysql_fetch_row($actor_rs))
 		{
 		   $actor_table .= "<tr align=center>";
-		   $actor_table .= "<td>".$row[0]."</td>";
+		   $actor_table .= "<td><a href=\"showA.php?identifier=$row[2]\">".$row[0]."</a></td>";
 		   $actor_table .= "<td>".$row[1]."</td></tr>";
 		}
 		$actor_table .= "</tbody></table></div><hr>";
@@ -157,6 +157,7 @@
  
 	     }
 	     //now functioning, need to add links
+		 mysql_close($db_connection);
 	     ?>
   <!--php query end from here -->
         </div>

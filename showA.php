@@ -52,9 +52,66 @@
           </ul>
         </div>
          <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h3><b> Actor Information Page :</b></h3>
+          <h3><b> Actor Information Page:</b></h3>
          <hr>
-            <hr>
+		 <?php
+			if($_GET["identifier"])
+			{
+				$id = $_GET["identifier"];
+
+				$db_connection = mysql_connect("localhost", "cs143", "");
+				if(!$db_connection)
+	    	 	{
+					$errmsg = mysql_error($db_connection);
+					print "Connection failed: $errmsg <br />";
+					exit(1);
+	    	 	}
+	    	 	mysql_select_db("CS143", $db_connection);
+
+				// Actor Info
+				$actor_query = "select concat(first, ' ', last), sex, dob, dod from Actor where id=$id";
+				$actor_rs = mysql_query($actor_query, $db_connection);
+				if(!$actor_rs)
+				{
+					$message = "Invalid actor ID: $id!";
+					print $message;
+				}
+				else
+				{
+					$row = mysql_fetch_row($actor_rs);
+					if($row[3] == "")
+					{
+						$row[3] = "n\a";
+					}
+
+					print "<h4><b>Actor Information:</b></h4><div class='table-responsive'> <table class='table table-bordered table-condensed table-hover'><thead> <tr><td>Name</td><td>Sex</td><td>Date of Birth</td><td>Date of Death</td></thead></tr><tbody><tr><td>$row[0]</td><td>$row[1]</td><td>$row[2]</td><td>$row[3]</td></tr></tbody></table></div>";
+				}
+
+				print "<hr>";
+
+				// Actor roles + movies
+				$movie_query = "select title, role, mid from MovieActor, Movie where MovieActor.mid = Movie.id and MovieActor.aid = $id";
+				$movie_rs = mysql_query($movie_query, $db_connection);
+				if(!$movie_rs)
+				{
+					print "Failed to find actor's movie roles!";
+				}
+				else
+				{
+					print "<h4><b>Actor's Movie Roles:</b></h4><div class='table-responsive'> <table class='table table-bordered table-condensed table-hover'><thead> <tr><td>Movie</td><td>Role</td></thead></tr>";
+
+					print "<tbody>";
+					while($row = mysql_fetch_row($movie_rs))
+					{
+						print "<tr><td><a href=\"showM.php?identifier=$row[2]\">$row[0]</a></td><td>$row[1]</td></tr>";
+					}
+					print "</tbody></table></div>";
+				}
+
+				mysql_close($db_connection);
+			}
+		?>
+         <hr>
            <label for="search_input">Search:</label>
           <form class="form-group" action="search.php" method ="GET" id="usrform">
               <input type="text" id="search_input"class="form-control" placeholder="Search..." name="result"><br>
