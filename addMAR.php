@@ -56,11 +56,71 @@
 	    <div class="form-group">
 	      <label for="movieid">Movie Title:</label>
 	      <select class = "form-control" name='movieid'>
+		<option value=NULL> </option>
+		<?php
+		   //connection setup to localhost with username CS143 and no password
+		   $db_connection = mysql_connect("localhost", "cs143", "");
+		   if(!$db_connection)
+		   {
+		   $errmsg = mysql_error($db_connection);
+		   print "Connection failed: $errmsg <br />";
+		   exit(1);
+		   }
+		   //select the CS143 database
+		   mysql_select_db("CS143", $db_connection);
+		   $m_query = "select id,title from Movie;";
+		   $rs = mysql_query($m_query);
+		   if(!$rs)
+		   {
+		      $message = "Invalid query: ". mysql_error()."\n";
+		      $message .= "Whole query: ".$m_query;
+		      die($message);
+		   }else
+		   {
+		      $content = "";
+		      while($row = mysql_fetch_row($rs))
+		      {
+		         $content .= '<option value="'.$row[0].'">'.$row[1].'</option>';
+		      }
+		      echo $content;
+		   }
+		   
+		   ?>
 	      </select>
 	    </div><br>
 	    <div class = "form-group">
 	      <label for="actorid">Actor:</label>
 	      <select class = "form-control" name='actorid'>
+		<option value=NULL> </option>
+		<?php
+		    //connection setup to localhost with username CS143 and no password
+		   $db_connection = mysql_connect("localhost", "cs143", "");
+		   if(!$db_connection)
+		   {
+		   $errmsg = mysql_error($db_connection);
+		   print "Connection failed: $errmsg <br />";
+		   exit(1);
+		   }
+		   //select the CS143 database
+		   mysql_select_db("CS143", $db_connection);
+		   
+		   $m_query = "select id,concat(first,' ',last) from Actor;";
+		   $rs = mysql_query($m_query);
+		   if(!$rs)
+		   {
+		      $message = "Invalid query: ". mysql_error()."\n";
+		      $message .= "Whole query: ".$m_query;
+		      die($message);
+		   }else
+		   {
+		      $content = "";
+		      while($row = mysql_fetch_row($rs))
+		      {
+		         $content .= '<option value="'.$row[0].'">'.$row[1].'</option>';
+		      }
+		      echo $content;
+		   }
+		   ?>
 	      </select>
 	    </div><br>
 	    <div class = "form-group">
@@ -69,6 +129,70 @@
 	      <input type='submit' class="btn btn-default" value='Click me!'>
 	    </div>
 	  </form>
+	  
+	  <?php
+	     //connection setup to localhost with username CS143 and no password
+	     $db_connection = mysql_connect("localhost", "cs143", "");
+	     if(!$db_connection)
+	     {
+	     $errmsg = mysql_error($db_connection);
+	     print "Connection failed: $errmsg <br />";
+	     exit(1);
+	     }
+	     //select the CS143 database
+	     mysql_select_db("CS143", $db_connection);
+
+	     //boolean flags to control program flow
+	     $role_present = FALSE;
+	     $movie_present = FALSE;
+	     $actor_present = FALSE;
+	     if($_GET["movieid"])
+	     {
+	        $m_movie = $_GET["movieid"];
+	        if($m_movie != "NULL")
+	        {
+	           $movie_present = TRUE;
+	        }else
+	        {
+	           print "<br>Movie field cannot be empty";
+	        }
+	     }
+	     if($_GET["actorid"])
+	     {
+	        $m_actor = $_GET["actorid"];
+	        if($m_actor != "NULL")
+	        {
+	           $actor_present = TRUE;
+	        }else
+	        {
+	           print "<br>Actor field cannot be empty";
+	        }
+	     }
+	     
+	     if($_GET["role"])
+	     {
+	        $m_role = $_GET["role"];
+	        $role_present = TRUE;
+	     }
+	     
+	     if($movie_present && $actor_present && $role_present)
+	     {
+	        //print "<br>movieid: ".$m_movie."<br>actorid: ".$m_actor."<br>role: ".$m_role;
+	     
+	        $main_query = "insert into MovieActor 
+			       values(".$m_movie.",".$m_actor.",'".$m_role."');";	     
+	        $m_rs = mysql_query($main_query);
+	        if(!$m_rs)
+	        {
+	           $message = "Invalid query: ". mysql_error()."\n";
+                   $message .= "Whole query: ".$main_query;
+                   die($message);
+	        }else
+	        {
+	           print "<br>Add success.";
+	        }
+	     }
+	     ?>
 	</div>
       </div>
     </div>

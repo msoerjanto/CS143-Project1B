@@ -203,6 +203,12 @@
          }
          $verify_query = "select * from ".$table_name." where id = ".$get_id."- 1 ;";
          $verify_rs = mysql_query($verify_query, $db_connection);
+         if(!$verify_rs)
+         {
+            $message = "Invalid query: ". mysql_error()."\n";
+            $message .= "Whole query: ".$verify_query;
+            die($message);
+         }
          $row = mysql_fetch_row($verify_rs);
          $verify_string = "<br>Add Success:<br>";
          for($l = 0; $l < mysql_num_fields($verify_rs); $l++)
@@ -224,7 +230,6 @@
 	 }
 	 print $verify_string;
       }
-      //DATE INSERTION PROBLEM, always get 0000-00-00
       $first_name = "";
       $last_name = "";
       $birth_date = "";
