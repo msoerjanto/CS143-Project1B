@@ -56,15 +56,132 @@
 	    <div class="form-group">
 	      <label for="movieid">Movie Title:</label>
 	      <select class = "form-control" name='movieid'>
+		<option value=NULL> </option>
+		<?php
+                   //connection setup to localhost with username CS143 and no password
+                   $db_connection = mysql_connect("localhost", "cs143", "");
+                   if(!$db_connection)
+                   {
+                   $errmsg = mysql_error($db_connection);
+                   print "Connection failed: $errmsg <br />";
+                   exit(1);
+                   }
+                   //select the CS143 database
+                   mysql_select_db("CS143", $db_connection);
+                   $m_query = "select id,title from Movie;";
+                   $rs = mysql_query($m_query);
+                   if(!$rs)
+                   {
+                      $message = "Invalid query: ". mysql_error()."\n";
+                      $message .= "Whole query: ".$m_query;
+                      die($message);
+                   }else
+                   {
+                      $content = "";
+                      while($row = mysql_fetch_row($rs))
+                      {
+                         $content .= '<option value="'.$row[0].'">'.$row[1].'</option>';
+                      }
+                      echo $content;
+                   }
+
+                   ?>
+
 	      </select>
 	    </div><br>
 	    <div class = "form-group">
 	      <label for="directorid">Director:</label>
 	      <select class = "form-control" name='directorid'>
+		<option value=NULL> </option>
+		<?php
+                    //connection setup to localhost with username CS143 and no password
+                   $db_connection = mysql_connect("localhost", "cs143", "");
+                   if(!$db_connection)
+                   {
+                   $errmsg = mysql_error($db_connection);
+                   print "Connection failed: $errmsg <br />";
+                   exit(1);
+                   }
+                   //select the CS143 database
+                   mysql_select_db("CS143", $db_connection);
+
+                   $m_query = "select id,concat(first,' ',last) from Director;";
+                   $rs = mysql_query($m_query);
+                   if(!$rs)
+                   {
+                      $message = "Invalid query: ". mysql_error()."\n";
+                      $message .= "Whole query: ".$m_query;
+                      die($message);
+                   }else
+                   {
+                      $content = "";
+                      while($row = mysql_fetch_row($rs))
+                      {
+                         $content .= '<option value="'.$row[0].'">'.$row[1].'</option>';
+                      }
+                      echo $content;
+                   }
+                   ?>
+
 	      </select><br>
 	      <input type='submit' class="btn btn-default" value='Click me!'>
 	    </div>
 	  </form>
+	   <?php
+	      //connection setup to localhost with username CS143 and no password
+              $db_connection = mysql_connect("localhost", "cs143", "");
+              if(!$db_connection)
+              {
+                 $errmsg = mysql_error($db_connection);
+                 print "Connection failed: $errmsg <br />";
+                 exit(1);
+              }
+              //select the CS143 database
+              mysql_select_db("CS143", $db_connection);
+	      
+	      //boolean flags for control
+	      $movie_present = FALSE;
+	      $director_present = FALSE;
+
+	      if($_GET["movieid"])
+	      {
+	         $m_movie = $_GET["movieid"];
+	         if($m_movie != "NULL")
+	         {
+	            $movie_present = TRUE;
+	         }else
+	         {
+	            print "<br>Movie field cannot be empty";
+	         }
+	      }
+	      if($_GET["directorid"])
+	      {
+	         $m_director = $_GET["directorid"];
+	         if($m_director != "NULL")
+	         {
+	            $director_present = TRUE;
+	         }else
+	         {
+	            print "<br>Director field cannot be empty";
+	         }
+	      }
+	      if($movie_present && $director_present)
+	      {
+	         print "<br>movieid: ".$m_movie."<br>directorid: ".$m_director;
+	         $m_query = "insert into MovieDirector
+			     values(".$m_movie.",".$m_director.");";
+	         $rs = mysql_query($m_query);
+	         if(!$rs)
+                 {
+                    $message = "Invalid query: ". mysql_error()."\n";
+                    $message .= "Whole query: ".$m_query;
+                    die($message);
+                 }else
+                 {
+                    print "<br>Add success.";
+                 }
+	      }
+	      ?>
 	 </div>
       </div>
     </div>

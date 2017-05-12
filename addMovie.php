@@ -145,8 +145,53 @@
 	       if($year_present && $company_present && $title_present)
 	       {
 	          $m_rating = $_GET["rate"];
-	          $m_genre = $_GET["genre[]"];
-	          print "<br>title: ".$m_title."<br>company: ".$m_company."<br>year: ".$m_year."<br>genre: ".$m_genre."<br>rating: ".$m_rating; 
+	          $genre_array = $_GET["genre"];
+	          $m_genre = "";
+	          foreach($genre_array as $gen)
+	          {
+	             $m_genre .= $gen." ";
+	          }
+	          //print "<br>title: ".$m_title."<br>company: ".$m_company."<br>year: ".$m_year."<br>genre: ".$m_genre."<br>rating: ".$m_rating; 
+	          
+
+	          //some constant queries to get the id for the new record as well as the query to update MaxMovieID
+	          $update_id = "update MaxMovieID set id=id+1";
+	          $m_query = "insert into Movie
+			      values((select * from MaxMovieID),'".$m_title."',".$m_year.",'".$m_rating."','".$m_company."');";
+	          //print $m_query."<br>";
+	          
+	          //execute the constructed query
+	          $rs = mysql_query($m_query, $db_connection);
+	          if(!$rs)
+	          {
+	             $message = "Invalid query: ". mysql_error()."\n";
+                     $message .= "Whole query: ".$m_query;
+                     die($message);
+	          }else
+	          {
+	             $update_rs = mysql_query($update_id);
+	             if(!$update_rs)
+	             {
+	                $message = "Invalid query: ". mysql_error()."\n";
+                        $message .= "Whole query: ".$update_id;
+                        die($message);
+	             }
+	             $verify_query = "select * from Movie where id =(select * from MaxMovieID) - 1;";
+	             $verify_rs = mysql_query($verify_query, $db_connection);
+	             if(!$verify_rs)
+                     {
+                        $message = "Invalid query: ". mysql_error()."\n";
+                        $message .= "Whole query: ".$verify_query;
+                        die($message);
+                     }
+	             $row = mysql_fetch_row($verify_rs);
+	             $verify_string = "<br>Add Success:<br>";
+	             for($l = 0; $l < mysql_num_fields($verify_rs); $l++)
+		     {	
+			$verify_string .= $row[$l]." ";
+		     }
+		     print $verify_string;
+	          }
 	       }
 
 	       ?>
