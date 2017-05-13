@@ -15,7 +15,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header navbar-defalt">
-          <a class="navbar-brand" href="index.php">CS143 DataBase Query System (Demo)</a>
+          <a class="navbar-brand" href="index.php">CS143 Project1B</a>
         </div>
       </div>
     </nav>
@@ -83,7 +83,7 @@
 		   }
 		}
 		$actor_query .= ";";
-		print "$actor_query<br>";
+		//print "$actor_query<br>";
 	        
 	        $movie_query = "select title, year, id
 				from Movie
@@ -99,7 +99,7 @@
 		   }
 		}
 		$movie_query .= ";";
-	        print "$movie_query<br/>";
+	        //print "$movie_query<br/>";
 	        
 		$actor_rs = mysql_query($actor_query, $db_connection);
 		if(!$actor_rs)

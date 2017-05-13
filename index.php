@@ -17,7 +17,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header navbar-defalt">
-          <a class="navbar-brand" href="index.php">CS143 DataBase Query System (Demo)</a>
+          <a class="navbar-brand" href="index.php">CS143 Project1B</a>
         </div>
       </div>
     </nav>
@@ -44,16 +44,13 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
              <div class="jumbotron">
-                <h2>Welcome to CS143 Query System! (Demo)</h2>
+                <h2>Welcome to the CS143 Project1B Webpage!</h2>
                 <br>
-    Declaration:
+    About:
 		<br><br>
     <ul>
-      <li>This is just a simple demo site created by students Yi Wang and Zhen Feng. Thanks for their work!</li>
-      <li>This demo site may not "fully satisfy" 
-      all the requirments assigned in the spec. The only purpose of this site is to give
-      you a sense. Whenever there is a conflict, the official project spec always prevails.</li>
-      <li>Copycat is strongly discouraged. Feel free to beat this demo site.</li>
+      <li>This is a simple website that satisfies the requirements of CS143 Project1B.</li>
+      <li>The website was created by Alex Khouderchah and Michael Soerjanto, but much of the layout was inspired by the demo site.</li>
     </ul>
             </div>
 

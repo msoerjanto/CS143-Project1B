@@ -25,7 +25,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header navbar-defalt">
-          <a class="navbar-brand" href="index.php">CS143 DataBase Query System (Demo)</a>
+          <a class="navbar-brand" href="index.php">CS143 Project1B</a>
         </div>
       </div>
     </nav>
