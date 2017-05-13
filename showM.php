@@ -120,6 +120,47 @@
 
 				print "<hr>";
 
+				// Get user reviews
+				$review_query = "select name, rating, time, comment from Review where mid=$id;";
+				$review_rs = mysql_query($review_query, $db_connection);
+
+				if(!$review_rs)
+				{
+					print "Failed to get movie reviews!";
+				}
+				else
+				{
+					print "<h4><b>User Reviews:</b></h4>";
+					$total = mysql_num_rows($review_rs);
+					if($total == 0)
+					{
+						print "<a href=\"addReview.php?identifier=$id\">No one has given this movie a review yet. Be the first!</a>";
+					}
+					else
+					{
+						$avg = 0;
+						$str = "";
+						while($row = mysql_fetch_row($review_rs))
+						{
+							$str .= "<p><font color=\"red\"><b>$row[0]</b></font>";
+							$str .= " rates this movie with the score <font color=\"blue\"><b>$row[1]</b></font>";
+							$str .= " and left a review at $row[2] <br>comment:<br>";
+							$str .= "$row[3]<br></p>";
+
+							$avg += $row[1];
+						}
+
+						$avg /= $total;
+
+						print "The average user score for this movie is $avg/5, based on $total review";
+						if($total > 1){ print "s."; }
+						else{ print "."; }
+						print "<br><a href=\"addReview.php?identifier=$id\">Add your review as well!</a>";
+
+						print "<hr><h4><b>Users said:</b></h4>$str";
+					}
+				}
+
 				mysql_close($db_connection);
 			}
 			?>
